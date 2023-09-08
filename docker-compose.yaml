@@ -1,0 +1,111 @@
+version: "3"
+
+services:
+
+#  db:
+#    container_name: postgres-story-manager
+#    image: postgres
+#    restart: always
+#    environment:
+#      - POSTGRES_DB=Run_App
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=25032001
+#    volumes:
+#      - db-data:/var/lib/postgresql/data
+#    expose:
+#      - 5432
+#    networks:
+#      - backend
+
+  postgres-story-progress-service:
+    container_name: postgres-story-progress-service
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=Run_App
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=25032001
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  discovery-service:
+    container_name: discovery-service
+    image: denpool/discovery-service
+    restart: always
+    ports:
+      - "7777:8761"
+    networks:
+      - backend
+    depends_on:
+      zipkin:
+        condition: service_healthy
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.37.1
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - backend
+    depends_on:
+      discovery-service:
+        condition: service_started
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - backend
+
+#  story-manager-service:
+#    container_name: story-manager-service
+#    image: denpool/story-manager-service:0.0.1
+#    ports:
+#      - "4444:4444"
+#    networks:
+#      - backend
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/Run_App
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=25032001
+#    depends_on:
+#      discovery-service:
+#        condition: service_started
+
+  story-progress-service:
+    container_name: story-progress-service
+    image: denpool/story-progress-service:0.0.1
+    ports:
+      - "5555:5555"
+    networks:
+      - backend
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-story-progress-service:5432/Run_App
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=25032001
+    depends_on:
+      discovery-service:
+        condition: service_started
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 7000:8080
+    networks:
+      - backend
+
+
+networks:
+  backend:
+volumes:
+  db-data:
