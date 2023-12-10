@@ -1,0 +1,8 @@
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/dto/response/CompletionPercentageForTeamResponse.java
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/dto/request/TeamTaskRequest.java
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/model/TeamTaskModel.java
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/StoryProgressServiceApplication.java
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/dto/response/CompletionPercentageForUserInTeamResponse.java
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/repository/TeamTaskRepository.java
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/controller/TeamTaskController.java
+/Users/denpool/IdeaProjects/Run_App/Backend/StoryProgress-Service/src/main/java/com/runapp/storyprogressservice/service/TeamTaskService.java
