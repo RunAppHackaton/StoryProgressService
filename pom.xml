@@ -31,6 +31,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.cloud.sql/postgres-socket-factory -->
+        <dependency>
+            <groupId>com.google.cloud.sql</groupId>
+            <artifactId>postgres-socket-factory</artifactId>
+            <version>1.14.1</version>
+        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -96,6 +102,21 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <SERVICE_SERVER_PORT>4000</SERVICE_SERVER_PORT>
+                        <ZIPKIN_URL>http://localhost:8714</ZIPKIN_URL>
+                        <DATABASE_NAME>database</DATABASE_NAME>
+                        <DATABASE_USERNAME>postgres</DATABASE_USERNAME>
+                        <DATABASE_PASSWORD>postgres</DATABASE_PASSWORD>
+                        <SQL_INSTANCE_NAME>instance-name</SQL_INSTANCE_NAME>
+                        <STORAGE_SERVICE_URL>http://localhost:6500</STORAGE_SERVICE_URL>
+                    </environmentVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>
