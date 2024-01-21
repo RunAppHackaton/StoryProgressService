@@ -66,17 +66,13 @@ public class TeamTaskController {
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @ApiResponse(responseCode = "404", description = "Team task not found")
     public ResponseEntity<TeamTaskModel> updateTeamTask(
-            @Parameter(description = "Updated team task data", required = true)
-            @PathVariable("taskId") int taskId,
-            @RequestBody TeamTaskRequest teamTaskRequest) {
-        try {
-            TeamTaskModel updatedTask = teamTaskRequest.toTeamTaskModel();
-            updatedTask.setId(taskId);
-            updatedTask = teamTaskService.updateTeamTask(updatedTask);
-            return new ResponseEntity<>(updatedTask, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        @Parameter(description = "Updated team task data", required = true)
+        @PathVariable("taskId") int taskId,
+        @RequestBody TeamTaskRequest teamTaskRequest) {
+        TeamTaskModel updatedTask = teamTaskRequest.toTeamTaskModel();
+        updatedTask.setId(taskId);
+        updatedTask = teamTaskService.updateTeamTask(updatedTask);
+        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
     @DeleteMapping("/{taskId}")
@@ -86,12 +82,8 @@ public class TeamTaskController {
     public ResponseEntity<Void> deleteTeamTask(
             @Parameter(description = "Team task ID", required = true)
             @PathVariable int taskId) {
-        try {
-            teamTaskService.deleteTeamTask(taskId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        teamTaskService.deleteTeamTask(taskId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/team/{teamId}/completion")
