@@ -1,8 +1,9 @@
-com/runapp/storyprogressservice/dto/response/CompletionPercentageForUserInTeamResponse.class
-com/runapp/storyprogressservice/StoryProgressServiceApplication.class
-com/runapp/storyprogressservice/service/TeamTaskService.class
-com/runapp/storyprogressservice/dto/request/TeamTaskRequest.class
-com/runapp/storyprogressservice/model/TeamTaskModel.class
-com/runapp/storyprogressservice/dto/response/CompletionPercentageForTeamResponse.class
-com/runapp/storyprogressservice/repository/TeamTaskRepository.class
-com/runapp/storyprogressservice/controller/TeamTaskController.class
+com\runapp\storyprogressservice\model\TeamTaskModel.class
+com\runapp\storyprogressservice\StoryProgressServiceApplication.class
+com\runapp\storyprogressservice\exceptions\GlobalExceptionHandler.class
+com\runapp\storyprogressservice\service\TeamTaskService.class
+com\runapp\storyprogressservice\dto\response\CompletionPercentageForUserInTeamResponse.class
+com\runapp\storyprogressservice\controller\TeamTaskController.class
+com\runapp\storyprogressservice\dto\response\CompletionPercentageForTeamResponse.class
+com\runapp\storyprogressservice\repository\TeamTaskRepository.class
+com\runapp\storyprogressservice\dto\request\TeamTaskRequest.class

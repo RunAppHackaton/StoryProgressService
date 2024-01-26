@@ -2,6 +2,8 @@ package com.runapp.storyprogressservice.service;
 
 import com.runapp.storyprogressservice.model.TeamTaskModel;
 import com.runapp.storyprogressservice.repository.TeamTaskRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,44 +14,46 @@ import java.util.Optional;
 public class TeamTaskService {
 
     private final TeamTaskRepository teamTaskRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TeamTaskService.class);
 
     @Autowired
     public TeamTaskService(TeamTaskRepository teamTaskRepository) {
         this.teamTaskRepository = teamTaskRepository;
     }
 
-    // Метод для создания новой задачи
     public TeamTaskModel createTeamTask(TeamTaskModel teamTask) {
+        LOGGER.info(String.format("TeamTask add: %s", teamTask));
         return teamTaskRepository.save(teamTask);
     }
 
-    // Метод для получения всех задач
     public List<TeamTaskModel> getAllTeamTasks() {
+        LOGGER.info("TeamTask get all");
         return teamTaskRepository.findAll();
     }
 
-    // Метод для получения задачи по идентификатору
     public Optional<TeamTaskModel> getTeamTaskById(int taskId) {
+        LOGGER.info(String.format("TeamTask get by id: %s", taskId));
         return teamTaskRepository.findById(taskId);
     }
 
-    // Метод для обновления задачи
     public TeamTaskModel updateTeamTask(TeamTaskModel teamTask) {
+        LOGGER.info(String.format("TeamTask update: %s", teamTask));
         return teamTaskRepository.save(teamTask);
     }
 
-    // Метод для удаления задачи по идентификатору
     public void deleteTeamTask(int taskId) {
+        LOGGER.info(String.format("TeamTask delete by id: %s", taskId));
         teamTaskRepository.deleteById(taskId);
     }
 
-    // Метод для получения процента выполненных заданий для определенной команды
     public double getCompletionPercentageForTeam(int teamId) {
+        LOGGER.info(String.format("Get completion percentage for TeamTask by id: %s", teamId));
         return teamTaskRepository.getCompletionPercentageForTeam(teamId);
     }
 
     // Метод для получения процента выполненных заданий для определенного пользователя в команде
     public double getCompletionPercentageForUserInTeam(int teamId, int userId) {
+        LOGGER.info(String.format("Get completion percentage of TeamTask for User by {teamId=%s, userId=%s}", teamId, userId));
         return teamTaskRepository.getCompletionPercentageForTeam(teamId, userId);
     }
 }
