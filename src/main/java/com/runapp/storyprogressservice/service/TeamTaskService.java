@@ -13,10 +13,10 @@ import java.util.Optional;
 @Service
 public class TeamTaskService {
 
+
     private final TeamTaskRepository teamTaskRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(TeamTaskService.class);
 
-    @Autowired
     public TeamTaskService(TeamTaskRepository teamTaskRepository) {
         this.teamTaskRepository = teamTaskRepository;
     }
@@ -31,7 +31,7 @@ public class TeamTaskService {
         return teamTaskRepository.findAll();
     }
 
-    public Optional<TeamTaskModel> getTeamTaskById(int taskId) {
+    public Optional<TeamTaskModel> getTeamTaskById(String taskId) {
         LOGGER.info(String.format("TeamTask get by id: %s", taskId));
         return teamTaskRepository.findById(taskId);
     }
@@ -41,19 +41,24 @@ public class TeamTaskService {
         return teamTaskRepository.save(teamTask);
     }
 
-    public void deleteTeamTask(int taskId) {
+    public void deleteTeamTask(String taskId) {
         LOGGER.info(String.format("TeamTask delete by id: %s", taskId));
         teamTaskRepository.deleteById(taskId);
     }
 
     public double getCompletionPercentageForTeam(int teamId) {
         LOGGER.info(String.format("Get completion percentage for TeamTask by id: %s", teamId));
-        return teamTaskRepository.getCompletionPercentageForTeam(teamId);
+        List<TeamTaskModel> tasks = teamTaskRepository.findByTeamId(teamId);
+        long totalTasks = tasks.size();
+        long completedTasks = tasks.stream().filter(TeamTaskModel::getDone).count();
+        return totalTasks == 0 ? 0.0 : (completedTasks * 100.0 / totalTasks);
     }
 
-    // Метод для получения процента выполненных заданий для определенного пользователя в команде
     public double getCompletionPercentageForUserInTeam(int teamId, int userId) {
         LOGGER.info(String.format("Get completion percentage of TeamTask for User by {teamId=%s, userId=%s}", teamId, userId));
-        return teamTaskRepository.getCompletionPercentageForTeam(teamId, userId);
+        List<TeamTaskModel> tasks = teamTaskRepository.findByTeamIdAndUserId(teamId, userId);
+        long totalTasks = tasks.size();
+        long completedTasks = tasks.stream().filter(TeamTaskModel::getDone).count();
+        return totalTasks == 0 ? 0.0 : (completedTasks * 100.0 / totalTasks);
     }
 }

@@ -43,7 +43,7 @@ public class TeamTaskController {
     @ApiResponse(responseCode = "404", description = "Team task not found")
     public ResponseEntity<TeamTaskModel> getTeamTaskById(
             @Parameter(description = "Team task ID", required = true)
-            @PathVariable int taskId) {
+            @PathVariable String taskId) {
         Optional<TeamTaskModel> teamTask = teamTaskService.getTeamTaskById(taskId);
         return teamTask.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -67,7 +67,7 @@ public class TeamTaskController {
     @ApiResponse(responseCode = "404", description = "Team task not found")
     public ResponseEntity<TeamTaskModel> updateTeamTask(
         @Parameter(description = "Updated team task data", required = true)
-        @PathVariable("taskId") int taskId,
+        @PathVariable("taskId") String taskId,
         @RequestBody TeamTaskRequest teamTaskRequest) {
         TeamTaskModel updatedTask = teamTaskRequest.toTeamTaskModel();
         updatedTask.setId(taskId);
@@ -81,7 +81,7 @@ public class TeamTaskController {
     @ApiResponse(responseCode = "404", description = "Team task not found")
     public ResponseEntity<Void> deleteTeamTask(
             @Parameter(description = "Team task ID", required = true)
-            @PathVariable int taskId) {
+            @PathVariable String taskId) {
         teamTaskService.deleteTeamTask(taskId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

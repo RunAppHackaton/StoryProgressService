@@ -1,7 +1,6 @@
 package com.runapp.storyprogressservice.dto.request;
 
 import com.runapp.storyprogressservice.model.TeamTaskModel;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ public class TeamTaskRequest {
 
     private int taskId;
 
-    private int done;
+    private boolean done;
 
     private int team_id;
 
@@ -24,7 +23,7 @@ public class TeamTaskRequest {
         teamTaskModel.setUserId(this.userId);
         teamTaskModel.setTaskId(this.taskId);
         teamTaskModel.setDone(this.done);
-        teamTaskModel.setTeam_id(this.team_id);
+        teamTaskModel.setTeamId(this.team_id);
         return teamTaskModel;
     }
 }
