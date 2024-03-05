@@ -22,10 +22,14 @@ eureka:
   client:
     enabled: false
 
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
 spring:
   data:
     mongodb:
-      uri: ${MONGO_URI:mongodb://username:password@localhost:27017/story-progress}
+      uri: ${MONGO_URI:mongodb+srv://s28680:Denis25032001_@cluster0.r9ylxkm.mongodb.net/Run_App}
   #  datasource:
 #    url: jdbc:postgres:///${DATABASE_NAME}
 #    username: ${DATABASE_USERNAME}
