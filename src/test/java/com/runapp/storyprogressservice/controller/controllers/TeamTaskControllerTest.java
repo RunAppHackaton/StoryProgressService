@@ -1,15 +1,19 @@
 package com.runapp.storyprogressservice.controller.controllers;
 
 import com.runapp.storyprogressservice.controller.TeamTaskController;
+import com.runapp.storyprogressservice.exceptions.GlobalExceptionHandler;
 import com.runapp.storyprogressservice.model.TeamTaskModel;
 import com.runapp.storyprogressservice.service.TeamTaskService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +25,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(TeamTaskController.class)
 public class TeamTaskControllerTest {
 
@@ -58,7 +63,7 @@ public class TeamTaskControllerTest {
     @Test
     public void testGetTeamTaskByIdWhenTaskExistsThenReturnTask() throws Exception {
         TeamTaskModel task = new TeamTaskModel();
-        task.setId("1");
+        task.setId(1);
 
         when(teamTaskService.getTeamTaskById("1")).thenReturn(Optional.of(task));
 
@@ -79,18 +84,19 @@ public class TeamTaskControllerTest {
 
     @Test
     public void testUpdateTeamTaskWhenTaskExistsThenReturnUpdated() throws Exception {
+        int taskId = 1;
         TeamTaskModel task = new TeamTaskModel();
-        task.setId("1");
+        task.setId(taskId);
 
         // Mocking the behavior of the service method
         when(teamTaskService.updateTeamTask(any(TeamTaskModel.class))).thenReturn(task);
 
         // Perform the PUT request and verify the response
-        mockMvc.perform(put("/team-tasks/1")
+        mockMvc.perform(put("/team-tasks/{taskId}", taskId).header("X-UserId", "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":1}"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(taskId));
     }
 
     @Test
@@ -112,7 +118,7 @@ public class TeamTaskControllerTest {
 
     @Test
     public void testGetCompletionPercentageForUserInTeamWhenUserExistsThenReturnPercentage() throws Exception {
-        when(teamTaskService.getCompletionPercentageForUserInTeam(1, 1)).thenReturn(50.0);
+        when(teamTaskService.getCompletionPercentageForUserInTeam(1, "1")).thenReturn(50.0);
 
         mockMvc.perform(get("/team-tasks/team/1/user/1/completion")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -123,13 +129,13 @@ public class TeamTaskControllerTest {
     @Test
     public void testUpdateTeamTaskWhenTaskExistsThenReturnUpdatedTask() throws Exception {
         TeamTaskModel updatedTask = new TeamTaskModel();
-        updatedTask.setId("1");
+        updatedTask.setId(1);
 
         when(teamTaskService.updateTeamTask(any(TeamTaskModel.class))).thenReturn(updatedTask);
 
-        mockMvc.perform(put("/team-tasks/{taskId}", 1)
+        mockMvc.perform(put("/team-tasks/{taskId}", 1).header("X-UserId", "1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"userId\":1,\"taskId\":1,\"done\":1,\"team_id\":1}"))
+                        .content("{\"userId\":\"1\",\"taskId\":1,\"done\":1,\"team_id\":1}"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1));
     }
@@ -138,9 +144,9 @@ public class TeamTaskControllerTest {
     public void testUpdateTeamTaskWhenTaskDoesNotExistThenReturnNotFound() throws Exception {
         when(teamTaskService.updateTeamTask(any(TeamTaskModel.class))).thenThrow(IllegalArgumentException.class);
 
-        mockMvc.perform(put("/team-tasks/{taskId}", 1)
+        mockMvc.perform(put("/team-tasks/{taskId}", 1).header("X-UserId", "1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"userId\":1,\"taskId\":1,\"done\":1,\"team_id\":1}"))
+                        .content("{\"userId\":\"1\",\"taskId\":1,\"done\":1,\"team_id\":1}"))
                 .andExpect(status().isNotFound());
     }
 
@@ -148,9 +154,10 @@ public class TeamTaskControllerTest {
     public void testUpdateTeamTaskWhenTaskDataIsInvalidThenReturnBadRequest() throws Exception {
         when(teamTaskService.updateTeamTask(any(TeamTaskModel.class))).thenThrow(IllegalArgumentException.class);
 
-        mockMvc.perform(put("/team-tasks/{taskId}", 1)
+        MockMvcBuilders.standaloneSetup(new TeamTaskController(teamTaskService)).setControllerAdvice(GlobalExceptionHandler.class).build()
+                .perform(put("/team-tasks/{taskId}", 1).header("X-UserId", "1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"userId\":-1,\"taskId\":-1,\"done\":-1,\"team_id\":-1}"))
+                        .content("{\"userId\":\"-1\",\"taskId\":-1,\"done\":-1,\"team_id\":-1}"))
                 .andExpect(status().isNotFound());
     }
 

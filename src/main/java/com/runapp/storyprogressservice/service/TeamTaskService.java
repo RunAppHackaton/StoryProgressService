@@ -54,7 +54,7 @@ public class TeamTaskService {
         return totalTasks == 0 ? 0.0 : (completedTasks * 100.0 / totalTasks);
     }
 
-    public double getCompletionPercentageForUserInTeam(int teamId, int userId) {
+    public double getCompletionPercentageForUserInTeam(int teamId, String userId) {
         LOGGER.info(String.format("Get completion percentage of TeamTask for User by {teamId=%s, userId=%s}", teamId, userId));
         List<TeamTaskModel> tasks = teamTaskRepository.findByTeamIdAndUserId(teamId, userId);
         long totalTasks = tasks.size();

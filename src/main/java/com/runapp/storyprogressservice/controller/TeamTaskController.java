@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,6 @@ public class TeamTaskController {
 
     private final TeamTaskService teamTaskService;
 
-    @Autowired
     public TeamTaskController(TeamTaskService teamTaskService) {
         this.teamTaskService = teamTaskService;
     }
@@ -55,25 +56,28 @@ public class TeamTaskController {
     @ApiResponse(responseCode = "400", description = "Invalid input")
     public ResponseEntity<TeamTaskModel> createTeamTask(
             @Parameter(description = "Team task data", required = true)
-            @RequestBody TeamTaskRequest teamTaskRequest) {
+            @RequestBody TeamTaskRequest teamTaskRequest,
+            @RequestHeader("X-UserId") String userId) {
+        teamTaskRequest.setUserId(userId);
         TeamTaskModel createdTeamTask = teamTaskService.createTeamTask(teamTaskRequest.toTeamTaskModel());
         return new ResponseEntity<>(createdTeamTask, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{taskId}")
-    @Operation(summary = "Update a team task", description = "Update an existing team task with the provided data")
-    @ApiResponse(responseCode = "200", description = "Team task updated", content = @Content(schema = @Schema(implementation = TeamTaskRequest.class)))
-    @ApiResponse(responseCode = "400", description = "Invalid input")
-    @ApiResponse(responseCode = "404", description = "Team task not found")
-    public ResponseEntity<TeamTaskModel> updateTeamTask(
-        @Parameter(description = "Updated team task data", required = true)
-        @PathVariable("taskId") String taskId,
-        @RequestBody TeamTaskRequest teamTaskRequest) {
-        TeamTaskModel updatedTask = teamTaskRequest.toTeamTaskModel();
-        updatedTask.setId(taskId);
-        updatedTask = teamTaskService.updateTeamTask(updatedTask);
-        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
-    }
+        @PutMapping("/{taskId}")
+        @Operation(summary = "Update a team task", description = "Update an existing team task with the provided data")
+        @ApiResponse(responseCode = "200", description = "Team task updated", content = @Content(schema = @Schema(implementation = TeamTaskRequest.class)))
+        @ApiResponse(responseCode = "400", description = "Invalid input")
+        @ApiResponse(responseCode = "404", description = "Team task not found")
+        public ResponseEntity<TeamTaskModel> updateTeamTask(
+            @Parameter(description = "Updated team task data", required = true)
+            @PathVariable("taskId") int taskId,
+            @RequestBody TeamTaskRequest teamTaskRequest,
+            @RequestHeader("X-UserId") String userId) {
+            TeamTaskModel updatedTask = teamTaskRequest.toTeamTaskModel();
+            updatedTask.setId(taskId);
+            updatedTask = teamTaskService.updateTeamTask(updatedTask);
+            return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+        }
 
     @DeleteMapping("/{taskId}")
     @Operation(summary = "Delete a team task", description = "Delete a team task by its ID")
@@ -99,7 +103,7 @@ public class TeamTaskController {
     @Operation(summary = "Get the completion percentage for a user in a team")
     public ResponseEntity<CompletionPercentageForUserInTeamResponse> getCompletionPercentageForUserInTeam(
             @PathVariable @Parameter(description = "Team ID", example = "1") int teamId,
-            @PathVariable @Parameter(description = "User ID", example = "1") int userId
+            @PathVariable @Parameter(description = "User ID", example = "1") String userId
     ) {
         double completionPercentage = teamTaskService.getCompletionPercentageForUserInTeam(teamId, userId);
         return new ResponseEntity<>(new CompletionPercentageForUserInTeamResponse(userId, teamId, completionPercentage), HttpStatus.OK);

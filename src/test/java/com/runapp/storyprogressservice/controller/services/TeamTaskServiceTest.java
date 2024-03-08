@@ -104,7 +104,7 @@ public class TeamTaskServiceTest {
         // Mock data
         List<TeamTaskModel> tasks = List.of(teamTask1, teamTask2);
         int teamId = 123;
-        int userId = 456;
+        String userId = "456";
 
         when(teamTaskRepository.findByTeamIdAndUserId(teamId, userId)).thenReturn(tasks);
 

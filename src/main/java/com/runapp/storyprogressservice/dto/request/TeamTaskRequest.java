@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TeamTaskRequest {
 
-    private int userId;
+    private String userId;
 
     private int taskId;
 

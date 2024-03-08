@@ -15,10 +15,10 @@ public class TeamTaskModel {
 
     @Id
     @Field(name = "id")
-    private String id;
+    private int id;
 
     @Field(name = "user_id")
-    private int userId;
+    private String userId;
 
     @Indexed
     @Field(name = "task_id")

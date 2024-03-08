@@ -18,6 +18,6 @@ public interface TeamTaskRepository extends MongoRepository<TeamTaskModel, Strin
     List<TeamTaskModel> findByTeamId(int teamId);
 
     @Query("{ 'team_id' : ?0, 'user_id' : ?1 }")
-    List<TeamTaskModel> findByTeamIdAndUserId(int teamId, int userId);
+    List<TeamTaskModel> findByTeamIdAndUserId(int teamId, String userId);
 }
 

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CompletionPercentageForUserInTeamResponse {
 
-    private int user_id;
+    private String user_id;
 
     private int team_id;
 
