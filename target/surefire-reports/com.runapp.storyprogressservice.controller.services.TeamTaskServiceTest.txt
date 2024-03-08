@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.runapp.storyprogressservice.controller.services.TeamTaskServiceTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.924 s - in com.runapp.storyprogressservice.controller.services.TeamTaskServiceTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.771 s - in com.runapp.storyprogressservice.controller.services.TeamTaskServiceTest
